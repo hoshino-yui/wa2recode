@@ -10,7 +10,7 @@
 *
 *      LZSS compression routines.
 *
-*      By Shawn Hargreaves.
+*      Modified from Shawn Hargreaves' code.
 *
 *      Original code by Haruhiko Okumura.
 *
@@ -18,8 +18,6 @@
 */
 
 
-//#include "allegro.h"
-//#include "allegro/internal/aintern.h"
 #include "lzss.h"
 
 /*
@@ -59,6 +57,7 @@ if match size is greater than this */
 
 struct LZSS_PACK_DATA               /* stuff for doing LZ compression */
 {
+    int outputindex;
     int state;                       /* where have we got to in the pack? */
     int i, c, len, r, s;
     int last_match_length, code_buf_ptr;
@@ -193,6 +192,7 @@ static void lzss_insertnode(int r, LZSS_PACK_DATA *dat)
         }
     }
 
+    // Replace matched node with current node.
     dat->dad[r] = dat->dad[p];
     dat->lson[r] = dat->lson[p];
     dat->rson[r] = dat->rson[p];
@@ -299,8 +299,12 @@ int lzss_write(unsigned char * outputbuf, int outputsize, LZSS_PACK_DATA *dat, i
     if (len == 0)
         goto getout;
 
-    for (i=1; i <= F; i++)
-        lzss_insertnode(r-i,dat);
+    // Do not pad search buffer with zeros.
+    // The output may reference non-existent positions.
+    // The program reading it will implode.
+    // I prefer degenerate trees over that.
+    //    for (i=1; i <= F; i++)
+    //        lzss_insertnode(r-i,dat);
     /* Insert the F strings, each of which begins with one or
     more 'space' characters. Note the order in which these
     strings are inserted. This way, degenerate trees will be
@@ -424,6 +428,7 @@ int lzss_write(unsigned char * outputbuf, int outputsize, LZSS_PACK_DATA *dat, i
     dat->last_match_length = last_match_length;
     dat->code_buf_ptr = code_buf_ptr;
     dat->mask = mask;
+    dat->outputindex = outputindex;
 
     return ret;
 }
@@ -580,8 +585,9 @@ int lzss_read(unsigned char *inputbuf, int inputsize, LZSS_UNPACK_DATA *dat, int
 int lzss(unsigned char* inputbuf, int inputlen, unsigned char* outputbuf, int outputlen) {
     LZSS_PACK_DATA *dat = create_lzss_pack_data();
     int n = lzss_write(outputbuf, outputlen, dat, inputlen, inputbuf, 1);
+    int compressed_len = dat->outputindex;
     free_lzss_pack_data(dat);
-    return n;
+    return compressed_len;
 }
 
 int unlzss(unsigned char* inputbuf, int inputlen, unsigned char* outputbuf, int outputlen) {

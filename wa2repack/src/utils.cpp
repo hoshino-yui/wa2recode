@@ -38,13 +38,13 @@ std::string remove_extension(const std::string& path) {
     return path.substr(0, path.length() - 4);
 }
 
-void pack_file(std::ofstream& packed_file, const std::string& input_file) {
-    std::ifstream input_file_stream(input_file, std::ios::app);
+void append_from_file(std::ofstream& packed_file, const std::string& input_file) {
+    std::ifstream input_file_stream(input_file, std::ios::app | std::ios::binary);
     packed_file << input_file_stream.rdbuf();
     input_file_stream.close();
 }
 
 void create_empty_file(const std::string& path) {
-    std::fstream file(path, std::ios::out | std::ios::binary);
+    std::ofstream file(path, std::ios::binary);
     file.close();
 }

@@ -10,7 +10,7 @@ void make_dir(std::string& path);
 void write_file(std::string path, const std::string& filename, unsigned char* buf, int len);
 int get_file_size(const std::string& path);
 std::string remove_extension(const std::string& path);
-void pack_file(std::ofstream& packed_file, const std::string& input_file);
+void append_from_file(std::ofstream& packed_file, const std::string& input_file);
 void create_empty_file(const std::string& path);
 
 #endif //WA2REPACK_UTILS_H

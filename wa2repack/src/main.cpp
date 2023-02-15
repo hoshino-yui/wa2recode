@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
         return 0;
     }
     if (command == "pack") {
-        pack(path);
+        pack(path, true);
         return 0;
     }
     std::cerr << "Unknown command: " << command << std::endl;
