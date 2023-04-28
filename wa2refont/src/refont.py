@@ -25,7 +25,7 @@ def replace_characters_on_image(input_file, block_size=40, font_type='GenSenRoun
                text[i], font=font, fill=(255, 255, 255, 255), stroke_width=stroke_width)
     if show:
         image.show()
-    image.save(remove_extension(input_file) + ".refont.tga", compression=None)
+    image.save(remove_extension(input_file) + ".tga", compression=None)
 
 
 if __name__ == '__main__':
