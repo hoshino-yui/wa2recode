@@ -13,7 +13,9 @@ def get_scripts(path):
 
 
 def read_files(decoder: Decoder, path):
-    return {f: decoder.read_script_from_file(join(path, f)) for f in get_scripts(path)}
+    files = {f: decoder.read_script_from_file(join(path, f)) for f in get_scripts(path)}
+    sorted_files = dict(sorted(files.items(), key=lambda item: item[1]))
+    return sorted_files
 
 
 def recode_files(decoder: DecoderTranslator, encoder: Encoder, in_path, out_path):
