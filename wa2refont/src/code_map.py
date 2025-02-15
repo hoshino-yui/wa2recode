@@ -20,5 +20,38 @@ code_maps = [
     (b'\x99\x40', b'\x99\xff', -95 + 51 + 94 + 189 * 16),
     (b'\x9a\x40', b'\x9a\xff', -95 + 51 + 94 + 189 * 17),
     (b'\x9b\x40', b'\x9b\xff', -95 + 51 + 94 + 189 * 18),
+    (b'\x9c\x40', b'\x9c\xff', -95 + 51 + 94 + 189 * 19),
     # Omit remaining ones, unused for the purpose of this project.
 ]
+
+
+def get_index_from_bytes(character_bytes):
+    for start, end, loc in code_maps:
+        if start <= character_bytes < end:
+            return loc + subtract_bytes(character_bytes, start)
+
+    raise ValueError('Unknown bytes ' + character_bytes)
+
+
+def get_bytes_from_index(index):
+    for start, end, loc in reversed(code_maps):
+        if loc <= index:
+            return add_bytes(start, int_to_bytes(index - loc))
+
+
+def subtract_bytes(bytes1: bytes, bytes2: bytes):
+    int1 = int.from_bytes(bytes1, byteorder='big')
+    int2 = int.from_bytes(bytes2, byteorder='big')
+    result = int1 - int2
+    return result
+
+
+def add_bytes(bytes1: bytes, bytes2: bytes):
+    int1 = int.from_bytes(bytes1, byteorder='big')
+    int2 = int.from_bytes(bytes2, byteorder='big')
+    result = int1 + int2
+    return int_to_bytes(result)
+
+
+def int_to_bytes(int1):
+    return int1.to_bytes(2, byteorder='big')

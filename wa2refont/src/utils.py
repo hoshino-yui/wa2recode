@@ -2,7 +2,7 @@ import os
 from os.path import isfile, join
 import re
 
-shift_jis = "shift-jis"
+shift_jis = "cp932"
 
 
 def get_resource_file_path(filename):

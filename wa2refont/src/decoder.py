@@ -1,5 +1,5 @@
 import utils
-from code_map import code_maps
+import code_map
 from os import makedirs
 from os.path import join
 
@@ -7,17 +7,21 @@ from os.path import join
 class Decoder:
     def __init__(self, character_encoding_file):
         self.character_encoding = utils.read_character_encoding(filename=character_encoding_file)
+        self.character_bytes_start, self.character_bytes_end = self.calculate_character_byte_range()
+
+    def calculate_character_byte_range(self):
+        start = code_map.get_bytes_from_index(0)
+        end = code_map.get_bytes_from_index(len(self.character_encoding) - 1)
+        return start, end
 
     def decode(self, character_bytes):
-        if character_bytes < b'\x88\x9f':
-            raise ValueError('Unexpected bytes ' + character_bytes)
-        if character_bytes > b'\x9b\xff':
-            raise ValueError('Unexpected bytes ' + character_bytes)
+        if character_bytes < self.character_bytes_start or character_bytes > self.character_bytes_end:
+            decoded_character = character_bytes.decode(encoding=utils.shift_jis, errors='strict')
+            if b'\x88\x9f' <= character_bytes <= b'\x9c\xff':
+                print("WTF. Found SJIS kanji. " + decoded_character)
+            return decoded_character
 
-        for start, end, loc in code_maps:
-            if start <= character_bytes < end:
-                position = loc + subtract_bytes(character_bytes, start)
-                return self.character_encoding[position]
+        return self.character_encoding[code_map.get_index_from_bytes(character_bytes)]
 
     def read_script(self, line: bytes):
         decoded_string = ""
@@ -30,25 +34,14 @@ class Decoder:
                 i = i + 1
             else:
                 character_bytes = line[i:i + 2]
-                if b'\x88\x9f' <= character_bytes <= b'\xea\xa0':
-                    decoded_character = self.decode(character_bytes)
-                    decoded_string = decoded_string + decoded_character
-                else:
-                    character = character_bytes.decode(encoding=utils.shift_jis, errors='strict')
-                    decoded_string = decoded_string + character
+                decoded_character = self.decode(character_bytes)
+                decoded_string = decoded_string + decoded_character
                 i = i + 2
         return decoded_string
 
     def read_script_from_file(self, filename):
         with open(filename, mode='rb') as f:
             return self.read_script(f.read())
-
-
-def subtract_bytes(bytes1: bytes, bytes2: bytes):
-    int1 = int.from_bytes(bytes1, byteorder='big')
-    int2 = int.from_bytes(bytes2, byteorder='big')
-    result = int1 - int2
-    return result
 
 
 def write_text_file(filename, script: str):

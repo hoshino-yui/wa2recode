@@ -1,4 +1,6 @@
 from os.path import join
+
+import code_map
 import utils
 from os import makedirs
 from code_map import code_maps
@@ -25,20 +27,7 @@ class Encoder:
 
     def encode(self, character):
         index = self.character_encoding.index(character)
-        for start, end, loc in reversed(code_maps):
-            if loc <= index:
-                return add_bytes(start, int_to_bytes(index - loc))
-
-
-def add_bytes(bytes1: bytes, bytes2: bytes):
-    int1 = int.from_bytes(bytes1, byteorder='big')
-    int2 = int.from_bytes(bytes2, byteorder='big')
-    result = int1 + int2
-    return int_to_bytes(result)
-
-
-def int_to_bytes(int1):
-    return int1.to_bytes(2, byteorder='big')
+        return code_map.get_bytes_from_index(index)
 
 
 def encode_files(encoder: Encoder, in_path, out_path):
