@@ -16,7 +16,3 @@ COPY wa2refont /wa2translate/wa2refont/
 COPY translate.sh /wa2translate/
 WORKDIR /wa2translate
 CMD ["bash", "/wa2translate/translate.sh"]
-
-# docker build -t wa2translate .
-# docker run -v %cd%:/wa2translate/myVolume wa2translate
-# docker run -v ${pwd}:/wa2translate/myVolume wa2translate
