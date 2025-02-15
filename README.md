@@ -18,14 +18,15 @@ Does not accept TGA files as input but outputs the result as a TGA image.
 
 ### Usage
 1. Extract font sheets in TGA format from the game using wa2repack.
-2. Convert the TGA formatted font sheets to BMP format. paint.net is the recommended tool.
-3. Place the BMP formatted font sheets (14pt本体.bmp, 14pt袋.bmp, 本体80.bmp, 袋影80.bmp) into the font_sheets directory. 
-4. Use following command to create new font sheets.
+2. Convert the TGA formatted font sheets (14pt本体.bmp, 14pt袋.bmp, 本体80.bmp, 袋影80.bmp) to BMP format.
    ```
-   cd wa2refont
-   python src/refont.py
+   convert fnt/14pt本体.tga fnt/14pt本体.bmp
    ```
-5. Use wa2repack to pack the font sheets. 
+3. Use following command to create new font sheets.
+   ```
+   python wa2refont/src/refont.py ./fnt
+   ```
+4. Use wa2repack to pack the font sheets. 
 
 ## wa2recode
 
