@@ -3,7 +3,6 @@ from os.path import join
 import code_map
 import utils
 from os import makedirs
-from code_map import code_maps
 
 
 class Encoder:
