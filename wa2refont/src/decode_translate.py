@@ -13,7 +13,7 @@ def get_scripts(path):
 
 
 def read_files(decoder: Decoder, path):
-    return [decoder.read_script_from_file(join(path, f)) for f in get_scripts(path)]
+    return {f: decoder.read_script_from_file(join(path, f)) for f in get_scripts(path)}
 
 
 def recode_files(decoder: DecoderTranslator, encoder: Encoder, in_path, out_path):
@@ -35,7 +35,7 @@ def main(in_path, out_path):
 
     decoded_scripts = read_files(decoder, in_path)
     with open("decoded.txt", "w", encoding='utf-8') as f:
-        f.writelines(s.replace('\\n', '\n') + '\n' for s in decoded_scripts)
+        f.writelines(filename + '\n' + s.replace('\\n', '\n') + '\n' for filename, s in decoded_scripts.items())
 
 
 if __name__ == '__main__':
