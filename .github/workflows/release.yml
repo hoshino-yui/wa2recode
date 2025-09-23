@@ -26,9 +26,9 @@ jobs:
       - name: Unzip data
         run: |
           unzip data.zip
-          cp WHITE\ ALBUM2/ck-gal.pak script.pak
-          cp WHITE\ ALBUM2/fon.pak fnt.pak
-          cp WHITE\ ALBUM2\ Special\ Contents/script_cn.pak script_special.pak
+          cp data/WHITE\ ALBUM2/ck-gal.pak script.pak
+          cp data/WHITE\ ALBUM2/fon.pak fnt.pak
+          cp data/WHITE\ ALBUM2\ Special\ Contents/script_cn.pak script_special.pak
 
       - name: Build Docker Image
         run: docker build -t wa2translate .
