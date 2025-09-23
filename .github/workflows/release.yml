@@ -44,7 +44,9 @@ jobs:
 
       - name: Generate Release Version
         id: release_version
-        run: echo "::set-output name=version::$(date +'%Y%m%d.%H%M')"
+        env:
+          BUILD_NUMBER: ${{github.run_number}}
+        run: echo "::set-output name=version::$(date +'%Y%m%d.%H%M').$BUILD_NUMBER"
 
       - name: Create Release
         id: create_release
