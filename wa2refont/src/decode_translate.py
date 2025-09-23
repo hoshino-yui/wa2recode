@@ -37,8 +37,8 @@ def get_scripts(path, is_special_contents: bool):
         return [f for f in listdir(path) if isfile(join(path, f)) and re.match(r"^[\d_]+.txt$", f)]
 
 
-def read_files(decoder: Decoder, path):
-    files = {f: decoder.read_script_from_file(join(path, f)) for f in get_scripts(path)}
+def read_files(decoder: Decoder, path, is_special_contents: bool):
+    files = {f: decoder.read_script_from_file(join(path, f)) for f in get_scripts(path, is_special_contents)}
     sorted_files = dict(sorted(files.items(), key=lambda item: item[0]))
     return sorted_files
 
@@ -61,7 +61,7 @@ def main(in_path, out_path, is_special_contents: bool):
 
     recode_files(decoder, encoder, in_path, out_path, is_special_contents)
 
-    decoded_scripts = read_files(decoder, in_path)
+    decoded_scripts = read_files(decoder, in_path, is_special_contents)
     with open("decoded.txt", "w", encoding='utf-8') as f:
         f.writelines(filename + '\n' + s.replace('\\n', '\n') + '\n' for filename, s in decoded_scripts.items())
 
