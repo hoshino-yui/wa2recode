@@ -28,6 +28,7 @@ jobs:
           unzip data.zip
           cp WHITE\ ALBUM2/ck-gal.pak script.pak
           cp WHITE\ ALBUM2/fon.pak fnt.pak
+          cp WHITE\ ALBUM2\ Special\ Contents/script_cn.pak script_special.pak
 
       - name: Build Docker Image
         run: docker build -t wa2translate .
@@ -38,8 +39,12 @@ jobs:
       - name: Zip assets
         run: |
           mkdir wa2recode
-          cp fnt_refont.repacked.pak wa2recode/fnt.pak
-          cp script_translated.repacked.pak wa2recode/script.pak
+          mkdir wa2recode/WHITE\ ALBUM2
+          mkdir wa2recode/WHITE\ ALBUM2\ Special\ Contents
+          cp fnt_refont.repacked.pak wa2recode/WHITE\ ALBUM2/fnt.pak
+          cp script_translated.repacked.pak wa2recode/WHITE\ ALBUM2/script.pak
+          cp fnt_refont.repacked.pak wa2recode/WHITE\ ALBUM2\ Special\ Contents/fnt.pak
+          cp script_special_translated.repacked.pak wa2recode/WHITE\ ALBUM2\ Special\ Contents/script.pak
           zip -r wa2recode.zip wa2recode
 
       - name: Generate Release Version

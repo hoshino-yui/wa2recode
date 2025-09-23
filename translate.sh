@@ -4,9 +4,11 @@ set -ex
 
 cp myVolume/fnt.pak .
 cp myVolume/script.pak .
+cp myVolume/script_special.pak .
 
 /wa2translate/wa2repack/build/wa2repack unpack fnt.pak
 /wa2translate/wa2repack/build/wa2repack unpack script.pak
+/wa2translate/wa2repack/build/wa2repack unpack script_special.pak
 
 ## Decompress font
 mkdir fnt_decompressed
@@ -35,11 +37,18 @@ cp -R fnt_refont/. myVolume/fnt_refont
 cp -R script/. script_translated
 /wa2translate/python/venv/bin/python wa2refont/src/decode_translate.py script script_translated
 
+## Translate Script for Special Contents
+cp -R script_special/. script_special_translated
+/wa2translate/python/venv/bin/python wa2refont/src/decode_translate.py script_special script_special_translated
+
 
 ## Repack Script
 /wa2translate/wa2repack/build/wa2repack pack script_translated
 cp script_translated.repacked.pak myVolume
-cp decoded.txt myVolume
+
+## Repack Script for Special Contents
+/wa2translate/wa2repack/build/wa2repack pack script_special_translated
+cp script_special_translated.repacked.pak myVolume
 
 ## Repack font
 /wa2translate/wa2repack/build/wa2repack pack fnt_refont
