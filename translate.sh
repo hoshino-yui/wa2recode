@@ -39,7 +39,7 @@ cp -R script/. script_translated
 
 ## Translate Script for Special Contents
 cp -R script_special/. script_special_translated
-/wa2translate/python/venv/bin/python wa2refont/src/decode_translate.py script_special script_special_translated
+/wa2translate/python/venv/bin/python wa2refont/src/decode_translate.py --special_contents script_special script_special_translated
 
 
 ## Repack Script
