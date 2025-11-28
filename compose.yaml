@@ -1,6 +1,5 @@
 services:
   wa2translate:
-    image: wa2translate
     build: .
     volumes:
       - .:/wa2translate/myVolume
