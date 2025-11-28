@@ -30,11 +30,8 @@ jobs:
           cp data/WHITE\ ALBUM2/fon.pak fnt.pak
           cp data/WHITE\ ALBUM2\ Special\ Contents/script_cn.pak script_special.pak
 
-      - name: Build Docker Image
-        run: docker build -t wa2translate .
-
-      - name: Run Docker Command
-        run: docker run -v $PWD:/wa2translate/myVolume wa2translate
+      - name: Docker up
+        run: docker compose up
 
       - name: Zip assets
         run: |
