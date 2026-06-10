@@ -1,5 +1,5 @@
-FROM ubuntu:latest
-RUN apt-get update && apt-get install -y python3-venv build-essential cmake imagemagick
+FROM alpine:latest
+RUN apk add bash python3 py3-pip g++ make cmake imagemagick
 
 COPY wa2refont/requirements.txt /tmp/requirements.txt
 RUN python3 -m venv /wa2translate/python/venv
